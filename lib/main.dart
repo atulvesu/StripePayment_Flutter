@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
+import 'package:payment/paymentScreen.dart';
+import 'package:payment/paymentSuccessScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,33 +41,80 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffDCDADB),
       appBar: AppBar(
-        title: const Text('Stripe Payment'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Make a Payment',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                print("Make Payment button pressed");
-                await makePayment();
-              },
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-              child: const Text('Make Payment'),
-            ),
-          ],
+        backgroundColor: Colors.teal,
+        title: const Text(
+          'Stripe Payment',
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400),
         ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(""),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     print("Make Payment button pressed");
+          //     await makePayment();
+          //   },
+          //   style: ElevatedButton.styleFrom(
+          //     padding:
+          //         const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          //     textStyle: const TextStyle(fontSize: 18),
+          //   ),
+          //   child: const Text('Make Payment'),
+          // ),
+
+          Container(
+            child: Column(
+              children: [
+                Image.network(
+                    'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Rs 1000",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15),
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          print("Pay now button pressed");
+                          await makePayment();
+                        },
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.teal,
+                              // border: Border.all(color: Colors.white)
+                            ),
+                            child: Text(
+                              "Pay Now",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white),
+                            )),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -97,14 +146,41 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
     }
   }
 
+  // displayPaymentSheet() async {
+  //   try {
+  //     await Stripe.instance.presentPaymentSheet();
+  //     // ignore: use_build_context_synchronously
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("Paid successfully")),
+  //     );
+  //     paymentIntent = null;
+  //   } on StripeException catch (e) {
+  //     print('Error: $e');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("Payment Cancelled")),
+  //     );
+  //   } catch (e) {
+  //     print("Error in displaying payment sheet: $e");
+  //   }
+  // }
   displayPaymentSheet() async {
     try {
       await Stripe.instance.presentPaymentSheet();
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Paid successfully")),
       );
-      paymentIntent = null;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PaymentSuccessScreen(
+            id: paymentIntent!['id'],
+            price: '1000',
+          ),
+        ),
+      );
+
+      // paymentIntent = null;
     } on StripeException catch (e) {
       print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
