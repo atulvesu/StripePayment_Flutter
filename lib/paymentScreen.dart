@@ -75,7 +75,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       await Stripe.instance.presentPaymentSheet().then((value) {
         showDialog(
           context: context,
-          builder: (_) => AlertDialog(
+          builder: (_) => const AlertDialog(
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

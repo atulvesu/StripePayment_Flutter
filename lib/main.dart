@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
-import 'package:payment/paymentScreen.dart';
 import 'package:payment/paymentSuccessScreen.dart';
 
 void main() {
@@ -41,7 +40,7 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffDCDADB),
+      backgroundColor: const Color(0xffDCDADB),
       appBar: AppBar(
         backgroundColor: Colors.teal,
         title: const Text(
@@ -53,7 +52,7 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(""),
+          const Text(""),
           // ElevatedButton(
           //   onPressed: () async {
           //     print("Make Payment button pressed");
@@ -67,52 +66,50 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
           //   child: const Text('Make Payment'),
           // ),
 
-          Container(
-            child: Column(
-              children: [
-                Image.network(
-                    'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                SizedBox(
-                  height: 10,
+          Column(
+            children: [
+              Image.network(
+                  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Rs 1000",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        print("Pay now button pressed");
+                        await makePayment();
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.teal,
+                            // border: Border.all(color: Colors.white)
+                          ),
+                          child: const Text(
+                            "Pay Now",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          )),
+                    ),
+                  ],
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Rs 1000",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          print("Pay now button pressed");
-                          await makePayment();
-                        },
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.teal,
-                              // border: Border.all(color: Colors.white)
-                            ),
-                            child: Text(
-                              "Pay Now",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
-                            )),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ],
       ),
